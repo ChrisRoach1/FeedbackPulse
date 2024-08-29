@@ -1,10 +1,66 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
-import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from 'lucide-vue-next'
+import {Head, useForm} from '@inertiajs/vue3';
 import { Button } from '@/Components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Components/ui/table'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/Components/ui/select'
+import {ref} from "vue";
+import {Input} from "@/Components/ui/input";
+import {Label} from "@/Components/ui/label";
+import {Question} from "@/types/Question";
+import {TagsInput, TagsInputItem, TagsInputItemText, TagsInputItemDelete, TagsInputInput} from "@/Components/ui/tags-input";
+import {TrashIcon} from "@radix-icons/vue";
+import InputError from "@/Components/InputError.vue";
+
+
+const questionnaireForm = useForm({
+  title: "",
+  questions: new Array<Question>()
+})
+
+function resetForm(){
+  questionnaireForm.reset();
+}
+
+function addQuestion(){
+  questionnaireForm.questions.push({
+    title: "",
+    type: "",
+    possibleValues: new Array<string>()
+  })
+}
+
+function resetPossibleItems(index: number){
+  questionnaireForm.questions[index].possibleValues = [];
+}
+
+function deleteQuestion(index: number){
+  questionnaireForm.questions.splice(index, 1);
+}
+
+function getQuestionTitleError(index: number){
+  let errorIndex = `questions.${index}.title`;
+  if(errorIndex in questionnaireForm.errors){
+    return "Title required"
+  }else{
+    return "";
+  }
+}
+
+function getQuestionTypeError(index: number): string
+{
+  let errorIndex = `questions.${index}.type`;
+  if(errorIndex in questionnaireForm.errors){
+    return "Type required"
+  }else{
+    return "";
+  }
+}
 
 </script>
 
@@ -19,128 +75,92 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
             <h1>Dashboard</h1>
         </template>
 
-        <div class="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-            <Card>
-                <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle class="text-sm font-medium">
-                        Total Revenue
-                    </CardTitle>
-                    <DollarSign class="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                    <div class="text-2xl font-bold">
-                        $45,231.89
-                    </div>
-                    <p class="text-xs text-muted-foreground">
-                        +20.1% from last month
-                    </p>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle class="text-sm font-medium">
-                        Subscriptions
-                    </CardTitle>
-                    <Users class="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                    <div class="text-2xl font-bold">
-                        +2350
-                    </div>
-                    <p class="text-xs text-muted-foreground">
-                        +180.1% from last month
-                    </p>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle class="text-sm font-medium">
-                        Sales
-                    </CardTitle>
-                    <CreditCard class="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                    <div class="text-2xl font-bold">
-                        +12,234
-                    </div>
-                    <p class="text-xs text-muted-foreground">
-                        +19% from last month
-                    </p>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle class="text-sm font-medium">
-                        Active Now
-                    </CardTitle>
-                    <Activity class="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                    <div class="text-2xl font-bold">
-                        +573
-                    </div>
-                    <p class="text-xs text-muted-foreground">
-                        +201 since last hour
-                    </p>
-                </CardContent>
-            </Card>
-        </div>
-        <div class="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-            <Card class="xl:col-span-2">
-                <CardHeader class="flex flex-row items-center">
-                    <div class="grid gap-2">
-                        <CardTitle>Tasks</CardTitle>
-                        <CardDescription>
-                            Tasks to crush.
-                        </CardDescription>
-                    </div>
-                    <Button as-child size="sm" class="ml-auto gap-1">
-                        <a href="#">
-                            View All
-                            <ArrowUpRight class="h-4 w-4" />
-                        </a>
-                    </Button>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Task</TableHead>
-                                <TableHead class="hidden xl:table-column">
-                                    Type
-                                </TableHead>
-                                <TableHead class="text-right">
-                                    Crush it
-                                </TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell>
-                                    <div class="font-medium">
-                                        Liam Johnson
-                                    </div>
-                                    <div class="hidden text-sm text-muted-foreground md:inline">
-                                        liam@example.com
-                                    </div>
-                                </TableCell>
-                                <TableCell class="text-right">
-                                    $250.00
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Recent Notes</CardTitle>
-                </CardHeader>
-                <CardContent class="grid gap-8">
+      <form @submit.prevent="questionnaireForm.post(route('questionnaire.store'), {onSuccess: () => questionnaireForm.reset(), preserveScroll: true})" class="grid w-full items-start gap-6 overflow-auto p-4 pt-0">
+        <fieldset class="grid gap-6 rounded-lg border p-4">
+          <legend class="-ml-1 px-1 text-sm font-medium">
+            Questionnaire Builder
+          </legend>
+          <div class="grid gap-3">
+            <Label for="questionnaireTitle">Title</Label>
+            <Input id="questionnaireTitle" type="text" placeholder="Title..." v-model="questionnaireForm.title"/>
+            <InputError class="mt-2" :message="questionnaireForm.errors.title"/>
+          </div>
+          <div class="grid gap-3">
+            <Button @click="addQuestion" type="button">Add Question</Button>
+            <InputError class="mt-2" :message="questionnaireForm.errors.questions ? 'Add some questions!' : '' "/>
 
-                </CardContent>
-            </Card>
-        </div>
+          </div>
+          <div v-for="(question, index) in questionnaireForm.questions">
+            <fieldset class="grid gap-6 rounded-lg border p-4">
+              <legend class="-ml-1 px-1 text-sm font-medium">
+                Question {{index+1}} *
+                <Button type="button" variant="ghost" @click="deleteQuestion(index)">
+                  <TrashIcon />
+                </Button>
+
+              </legend>
+              <div class="grid gap-3">
+                <Label :for="'questionTitle-' + index">Question</Label>
+                <Input :id="'questionTitle-' + index" type="text" placeholder="" v-model="question.title"/>
+                <InputError class="mt-2" :message="getQuestionTitleError(index)"/>
+              </div>
+              <div class="grid gap-3">
+                <Label :for="'questionType-' + index">Question Type</Label>
+                <Select :update:modelValue="resetPossibleItems(index)" escapeDown="resetPossibleItems(index)" :id="'questionType-' + index" v-model="question.type">
+                  <SelectTrigger id="model" class="items-start [&_[data-description]]:hidden">
+                    <SelectValue placeholder="Select a Question Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">
+                      Free Text
+                    </SelectItem>
+                    <SelectItem value="2" >
+                      Multi Select
+                    </SelectItem>
+                    <SelectItem value="3" >
+                      Text Area
+                    </SelectItem>
+                    <SelectItem value="4">
+                      Radio Button
+                    </SelectItem>
+                    <SelectItem value="5">
+                      Rating
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <InputError class="mt-2" :message="getQuestionTypeError(index)" />
+              </div>
+              <div v-if="question.type === '4'">
+                <div class="grid gap-3">
+                  <Label :for="'radio-button-value-1-' + index">Radio Button 1 Value</Label>
+                  <Input :id="'radio-button-value-1-' + index" type="text" placeholder="" v-model="question.possibleValues[0]"/>
+
+                  <Label :for="'radio-button-value-2-' + index">Radio Button 2 Value</Label>
+                  <Input :id="'radio-button-value-2-' + index" type="text" placeholder="" v-model="question.possibleValues[1]"/>
+                </div>
+              </div>
+
+              <div v-if="question.type === '2'">
+                <div class="grid gap-3">
+                  <TagsInput v-model="question.possibleValues">
+                    <TagsInputItem v-for="item in question.possibleValues" :key="item" :value="item">
+                      <TagsInputItemText />
+                      <TagsInputItemDelete />
+                    </TagsInputItem>
+
+                    <TagsInputInput placeholder="Values..." />
+                  </TagsInput>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div class="gap-3 flex flex-row-reverse">
+            <Button @click="resetForm" variant="outline" type="button">Reset</Button>
+            <Button type="submit">Submit</Button>
+          </div>
+        </fieldset>
+
+      </form>
 
     </AuthenticatedLayout>
 </template>

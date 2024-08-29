@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuestionnaireController;
+use App\Models\Questionnaire;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,9 +20,10 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/example', function () {
-    return Inertia::render('ExampleDashboard');
-})->middleware(['auth', 'verified'])->name('example');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/questionnaire', [QuestionnaireController::class, 'store'])->name('questionnaire.store');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

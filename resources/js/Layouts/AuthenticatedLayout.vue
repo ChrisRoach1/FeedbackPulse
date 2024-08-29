@@ -17,7 +17,7 @@ import {Button} from "@/Components/ui/button";
                 <div class="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
                     <a href="/" class="flex items-center gap-2 font-semibold">
                         <Package2 class="h-6 w-6" />
-                        <span class="">Task.dev</span>
+                        <span class="">Pulse Feedback</span>
                     </a>
                 </div>
                 <div class="flex-1">
@@ -25,10 +25,6 @@ import {Button} from "@/Components/ui/button";
                         <a :href="route('dashboard')" class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" :class="{'bg-muted text-primary': route().current('dashboard')}">
                             <Home class="h-4 w-4" />
                             Dashboard
-                        </a>
-                        <a :href="route('example')" class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary" :class="{'bg-muted text-primary': route().current('example')}" >
-                            <LineChart class="h-4 w-4" />
-                            Analytics
                         </a>
                     </nav>
                 </div>
@@ -50,15 +46,11 @@ import {Button} from "@/Components/ui/button";
                     <SheetContent side="left" class="flex flex-col">
                         <nav class="grid gap-2 text-lg font-medium">
                             <a href="#" class="flex items-center gap-2 text-lg font-semibold">
-                                <span class="sr-only">Task.dev</span>
+                                <span class="sr-only">Pulse Feedback</span>
                             </a>
                             <a :href="route('dashboard')" class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground" :class="{'bg-muted': route().current('dashboard')}">
                                 <Home class="h-5 w-5" />
                                 Dashboard
-                            </a>
-                            <a :href="route('example')" class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground" :class="{'bg-muted': route().current('example')}">
-                                <LineChart class="h-5 w-5" />
-                                Analytics
                             </a>
                         </nav>
                     </SheetContent>

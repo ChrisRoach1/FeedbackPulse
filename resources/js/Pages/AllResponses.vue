@@ -12,17 +12,19 @@ let props = defineProps<{
   responses?: Response[];
 }>();
 
-const groupedResponses: Map<String, Response[]> = ref(new Map<String, Response[]>());
+const groupedResponses = ref(new Map<number, Response[]>(null));
 const api = ref<CarouselApi>()
 const totalCount = ref(0)
 const current = ref(0)
 
 onMounted(() =>{
-  const uniqueGroupIds = [...new Set(props.responses.map(x => x.responseGroupId))];
+  const uniqueGroupIds = [...new Set(props.responses?.map(x => x.responseGroupId))];
   let index = 0;
   uniqueGroupIds.forEach(responseGroupdId =>{
-    const responses = props.responses.filter(x => x.responseGroupId == responseGroupdId);
-    groupedResponses.value.set(index, responses);
+    const responses = props.responses?.filter(x => x.responseGroupId == responseGroupdId);
+    if(responses !== undefined){
+      groupedResponses.value.set(index, responses);
+    }
     index++;
   })
 });

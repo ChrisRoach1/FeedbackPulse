@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -43,5 +44,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function questionnaires(): HasMany{
+        return $this->hasMany(Questionnaire::class);
+    }
+
+    public function totalResponders(): int{
+        $responses = Response::query()->whereIn('questionnaire_id', $this->questionnaires()->select('id')->get())->groupBy('responseGroupId')->select('responseGroupId')->get()->count();
+        return $responses;
     }
 }

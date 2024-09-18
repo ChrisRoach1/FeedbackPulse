@@ -8,6 +8,8 @@ use App\Models\Questionnaire;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class QuestionnaireController extends Controller
 {
@@ -23,7 +25,8 @@ class QuestionnaireController extends Controller
 
         $createdQuestionnaire = Questionnaire::create([
             'title' => $values['title'],
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
+            'slug' => Str::slug($values['title'], '-') . '-' . auth()->id(),
         ]);
 
 
@@ -37,5 +40,33 @@ class QuestionnaireController extends Controller
         }
 
         return Redirect::route('dashboard');
+    }
+
+    public function index(Request $request)
+    {
+        $questionnaires = auth()->user()->questionnaires()->with('questions')->when($request['searchString'], function ($query) use ($request) {
+            return $query->where('title', 'like', '%' . $request->get('searchString') . '%');
+        })->get();
+
+        $formattedQuestionnaire = $questionnaires->map(function ($questionnaire) {
+           return [
+               'id' => $questionnaire->id,
+               'title' => $questionnaire->title,
+               'slug' => $questionnaire->slug,
+               'questions' => $questionnaire->questions->map(function ($question) {
+                   return [
+                       'id' => $question->id,
+                       'title' => $question->title,
+                       'type' => $question->type,
+                       'possibleValues' => preg_split('/,/', $question->possibleValues, -1, PREG_SPLIT_NO_EMPTY),
+                   ];
+               })
+           ];
+        });
+
+        return Inertia::render('AllQuestionnaires',[
+            'questionnaires' => $formattedQuestionnaire,
+            'searchString' => $request['searchString']
+        ]);
     }
 }

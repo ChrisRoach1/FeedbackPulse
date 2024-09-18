@@ -13,7 +13,8 @@ class Questionnaire extends Model
 
     protected $fillable = [
       'title',
-      'user_id'
+      'user_id',
+        'slug'
     ];
 
 
@@ -23,5 +24,9 @@ class Questionnaire extends Model
 
     public function user(): BelongsTo{
         return $this->belongsTo(User::class);
+    }
+
+    public function responses(): HasMany{
+        return $this->hasMany(Response::class);
     }
 }

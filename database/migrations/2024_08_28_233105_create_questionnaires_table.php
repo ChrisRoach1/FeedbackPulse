@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('questionnaires', function (Blueprint $table) {
             $table->id();
             $table->string("title", 500)->nullable(false);
+            $table->string("slug", 700)->nullable(false);
             $table->foreignIdFor(User::class);
             $table->timestamps();
         });

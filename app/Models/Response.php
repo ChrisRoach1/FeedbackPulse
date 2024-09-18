@@ -6,29 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Question extends Model
+class Response extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-      'title',
-      'type',
-      'possibleValues',
-      'questionnaire_id'
+        'userName',
+        'questionnaire_id',
+        'question_id',
+        'response',
+        'responseGroupId'
     ];
 
 
-    protected $casts = [
-        'type' => 'string'
-    ];
+    public function question(): BelongsTo{
+        return $this->belongsTo(Question::class);
+    }
 
     public function questionnaire(): BelongsTo{
         return $this->belongsTo(Questionnaire::class);
-    }
-
-    public function responses(): HasMany{
-        return $this->hasMany(Response::class);
     }
 }

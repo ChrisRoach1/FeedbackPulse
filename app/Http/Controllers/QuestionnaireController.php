@@ -8,6 +8,7 @@ use App\Models\Questionnaire;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -29,7 +30,6 @@ class QuestionnaireController extends Controller
             'slug' => Str::slug($values['title'], '-') . '-' . auth()->id(),
         ]);
 
-
         foreach($values['questions'] as $question) {
             Question::create([
                 'title' => $question['title'],
@@ -44,7 +44,7 @@ class QuestionnaireController extends Controller
 
     public function index(Request $request)
     {
-        $questionnaires = auth()->user()->questionnaires()->with('questions')->when($request['searchString'], function ($query) use ($request) {
+        $questionnaires = Auth::user()->questionnaires()->with('questions')->when($request['searchString'], function ($query) use ($request) {
             return $query->where('title', 'like', '%' . $request->get('searchString') . '%');
         })->get();
 

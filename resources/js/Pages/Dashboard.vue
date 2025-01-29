@@ -14,12 +14,12 @@ import {Input} from "@/Components/ui/input";
 import {Label} from "@/Components/ui/label";
 import {Question} from "@/types/Question";
 import {TagsInput, TagsInputItem, TagsInputItemText, TagsInputItemDelete, TagsInputInput} from "@/Components/ui/tags-input";
-import {TrashIcon, ViewVerticalIcon} from "@radix-icons/vue";
+import {TrashIcon, ViewVerticalIcon, RocketIcon} from "@radix-icons/vue";
 import InputError from "@/Components/InputError.vue";
 import QuestionnairePreview from "@/Pages/QuestionnairePreview.vue";
 import Modal from "@/Components/Modal.vue";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/Components/ui/card";
-import { Activity, ArrowUpRight, CircleUser, CreditCard, DollarSign, Menu, Package2, Search, Users } from 'lucide-vue-next'
+import { Activity, ArrowUpRight, CircleUser, CreditCard, DollarSign, Menu, Package2, Search, Users, ClipboardIcon } from 'lucide-vue-next'
 
 const questionnaireForm = useForm({
   title: "",
@@ -30,7 +30,7 @@ const props = defineProps<{
   totalResponders: number;
   totalUserQuestionnaireCount: number;
   totalQuestionnaireCount: number;
-}>();
+}>()
 
 const confirmOpenPreview = ref(false);
 
@@ -85,78 +85,93 @@ const closeModal = () => {
 
 </script>
 
-
-
 <template>
-    <Head title="Dashboard" />
+  <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
+  <AuthenticatedLayout>
+    <template #header>
+      <h1 class="text-3xl font-bold tracking-tight">Questionnaire Dashboard</h1>
+    </template>
 
-      <template #header>
-        <h1>Dashboard</h1>
-      </template>
-      <div class="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-        <Card>
-          <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle class="text-sm font-medium">
-              Total Responses
-            </CardTitle>
-            <Users class="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div class="text-2xl font-bold">
-              {{props.totalResponders}}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle class="text-sm font-medium">
-              Your Total Questionnaires
-            </CardTitle>
-            <Menu class="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div class="text-2xl font-bold">
-              {{ props.totalUserQuestionnaireCount }}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle class="text-sm font-medium">
-              Total Questionnaires
-            </CardTitle>
-            <Activity class="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div class="text-2xl font-bold">
-              {{ props.totalQuestionnaireCount }}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card class="xl:col-span-2">
-        <CardHeader class="flex flex-row items-center">
-          <div class="grid gap-2">
-            <CardTitle>Questionnaire Builder
-            </CardTitle>
-            <CardDescription>
-              Build out a new questionnaire
-            </CardDescription>
-          </div>
-          <Button as-child size="sm" class="ml-auto gap-1">
-            <a :href="route('allQuestionnaires')">
-              View All
-              <ArrowUpRight class="h-4 w-4" />
-            </a>
-          </Button>
+    <!-- Enhanced Metrics Grid -->
+    <div class="grid gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-3 mb-8">
+      <Card class="hover:border-primary transition-colors">
+        <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle class="text-sm font-medium text-muted-foreground">
+            Total Responses
+          </CardTitle>
+          <Users class="h-5 w-5 text-primary" />
         </CardHeader>
         <CardContent>
-          <Button variant="secondary" @click="openPreview" class="max-w-12 mb-5">
-            <ViewVerticalIcon/>
-          </Button>
+          <div class="text-3xl font-bold">{{ props.totalResponders }}</div>
+          <p class="text-xs text-muted-foreground mt-1">
+            +20.1% from last month
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card class="hover:border-primary transition-colors">
+        <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle class="text-sm font-medium text-muted-foreground">
+            Your Questionnaires
+          </CardTitle>
+          <ClipboardIcon class="h-5 w-5 text-primary" />
+        </CardHeader>
+        <CardContent>
+          <div class="text-3xl font-bold">{{ props.totalUserQuestionnaireCount }}</div>
+          <p class="text-xs text-muted-foreground mt-1">
+            +2 new this week
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card class="hover:border-primary transition-colors">
+        <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle class="text-sm font-medium text-muted-foreground">
+            Platform Total
+          </CardTitle>
+          <Activity class="h-5 w-5 text-primary" />
+        </CardHeader>
+        <CardContent>
+          <div class="text-3xl font-bold">{{ props.totalQuestionnaireCount }}</div>
+          <p class="text-xs text-muted-foreground mt-1">
+            +12.3% overall growth
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+
+    <!-- Enhanced Builder Section -->
+    <Card class="xl:col-span-2 border-primary/20 hover:border-primary/40 transition-colors">
+      <CardHeader class="flex flex-row items-center space-x-4">
+        <div class="space-y-1.5">
+          <CardTitle class="text-2xl font-bold flex items-center gap-2">
+            <RocketIcon class="h-6 w-6 text-primary" />
+            Questionnaire Builder
+          </CardTitle>
+          <CardDescription class="text-muted-foreground">
+            Craft your perfect survey with our intuitive tools
+          </CardDescription>
+        </div>
+        <Button as-child size="sm" class="ml-auto gap-1">
+          <a :href="route('allQuestionnaires')" class="group">
+            View All
+            <ArrowUpRight class="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </a>
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <div class="space-y-8">
+          <div class="flex items-center justify-between">
+            <Button
+              variant="ghost"
+              @click="openPreview"
+              class="gap-2 text-muted-foreground hover:text-primary"
+            >
+              <ViewVerticalIcon class="h-4 w-4" />
+              Preview Draft
+            </Button>
+          </div>
 
           <Modal :show="confirmOpenPreview" @close="closeModal" :max-width="'2xl'">
             <div class="p-5">
@@ -167,89 +182,134 @@ const closeModal = () => {
             </div>
           </Modal>
 
-          <form @submit.prevent="questionnaireForm.post(route('questionnaire.store'), {onSuccess: () => questionnaireForm.reset(), preserveScroll: true})" class="grid w-full items-start gap-6 overflow-auto p-4 pt-0">
-            <fieldset class="grid gap-6 rounded-lg border p-4">
-              <div class="grid gap-3">
-                <Label for="questionnaireTitle">Title</Label>
-                <Input id="questionnaireTitle" type="text" placeholder="Title..." v-model="questionnaireForm.title"/>
-                <InputError class="mt-2" :message="questionnaireForm.errors.title"/>
+          <form @submit.prevent="questionnaireForm.post(route('questionnaire.store'), {onSuccess: () => questionnaireForm.reset(), preserveScroll: true})"
+                class="space-y-8 overflow-auto p-1">
+            <div class="space-y-6">
+              <div class="space-y-3">
+                <Label for="questionnaireTitle" class="text-base">Questionnaire Title</Label>
+                <Input
+                  id="questionnaireTitle"
+                  type="text"
+                  placeholder="Customer Feedback Survey..."
+                  v-model="questionnaireForm.title"
+                  class="text-lg py-6"
+                />
+                <InputError class="mt-1" :message="questionnaireForm.errors.title"/>
               </div>
-              <div class="grid gap-3">
-                <Button @click="addQuestion" type="button">Add Question</Button>
-                <InputError class="mt-2" :message="questionnaireForm.errors.questions ? 'Add some questions!' : '' "/>
 
-              </div>
-              <div v-for="(question, index) in questionnaireForm.questions">
-                <fieldset class="grid gap-6 rounded-lg border p-4">
-                  <legend class="-ml-1 px-1 text-sm font-medium">
-                    Question {{index+1}} *
-                    <Button type="button" variant="ghost" @click="deleteQuestion(index)">
-                      <TrashIcon />
+              <div class="space-y-6">
+                <div class="space-y-3">
+                  <Button
+                    @click="addQuestion"
+                    type="button"
+                    variant="outline"
+                    class="w-full border-dashed hover:border-primary/50 hover:bg-primary/5"
+                  >
+                    + Add Question
+                  </Button>
+                  <InputError class="mt-1 text-center" :message="questionnaireForm.errors.questions ? 'Add some questions!' : '' "/>
+                </div>
+
+                <div v-for="(question, index) in questionnaireForm.questions"
+                     class="space-y-4 border-l-4 border-primary/20 pl-4 hover:border-primary/40 transition-colors">
+                  <div class="flex items-center justify-between">
+                    <h3 class="font-medium text-lg">Question {{ index + 1 }}</h3>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      @click="deleteQuestion(index)"
+                      class="text-muted-foreground hover:text-destructive"
+                    >
+                      <TrashIcon class="h-4 w-4" />
                     </Button>
-
-                  </legend>
-                  <div class="grid gap-3">
-                    <Label :for="'questionTitle-' + index">Question</Label>
-                    <Input :id="'questionTitle-' + index" type="text" placeholder="" v-model="question.title"/>
-                    <InputError class="mt-2" :message="getQuestionTitleError(index)"/>
                   </div>
-                  <div class="grid gap-3">
-                    <Label :for="'questionType-' + index">Question Type</Label>
-                    <Select :update:modelValue="resetPossibleItems(index)" :id="'questionType-' + index" v-model="question.type">
-                      <SelectTrigger id="model" class="items-start [&_[data-description]]:hidden">
-                        <SelectValue placeholder="Select a Question Type" />
-                      </SelectTrigger>
-                      <SelectContent >
-                        <SelectItem value="1">
-                          Free Text
-                        </SelectItem>
-                        <SelectItem value="2" >
-                          Select
-                        </SelectItem>
-                        <SelectItem value="3" >
-                          Text Area
-                        </SelectItem>
-                        <SelectItem value="4">
-                          Radio Button
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <InputError class="mt-2" :message="getQuestionTypeError(index)" />
-                  </div>
-                  <div v-if="question.type === '4'">
-                    <div class="grid gap-3">
-                      <Label :for="'radio-button-value-1-' + index">Radio Button 1 Value</Label>
-                      <Input :id="'radio-button-value-1-' + index" type="text" placeholder="" v-model="question.possibleValues[0]"/>
 
-                      <Label :for="'radio-button-value-2-' + index">Radio Button 2 Value</Label>
-                      <Input :id="'radio-button-value-2-' + index" type="text" placeholder="" v-model="question.possibleValues[1]"/>
+                  <div class="space-y-4">
+                    <div class="space-y-2">
+                      <Label :for="'questionTitle-' + index">Question Text</Label>
+                      <Input
+                        :id="'questionTitle-' + index"
+                        type="text"
+                        placeholder="How satisfied are you with our service?"
+                        v-model="question.title"
+                      />
+                      <InputError class="mt-1" :message="getQuestionTitleError(index)"/>
                     </div>
-                  </div>
 
-                  <div v-if="question.type === '2'">
-                    <div class="grid gap-3">
-                      <TagsInput v-model="question.possibleValues">
+                    <div class="space-y-2">
+                      <Label :for="'questionType-' + index">Response Type</Label>
+                      <Select
+                        :update:modelValue="resetPossibleItems(index)"
+                        :id="'questionType-' + index"
+                        v-model="question.type"
+                      >
+                        <SelectTrigger class="w-[240px]">
+                          <SelectValue placeholder="Select response type..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1" class="hover:bg-primary/5">Free Text</SelectItem>
+                          <SelectItem value="2">Multiple Choice</SelectItem>
+                          <SelectItem value="3">Long Answer</SelectItem>
+                          <SelectItem value="4">Radio Button</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <InputError class="mt-1" :message="getQuestionTypeError(index)" />
+                    </div>
+
+                    <!-- Enhanced Options Section -->
+                    <div v-if="question.type === '4'" class="space-y-3 bg-muted/10 p-4 rounded-lg">
+                      <div class="space-y-2">
+                        <Label>Radio Button values</Label>
+                        <div class="grid gap-3 md:grid-cols-2">
+                          <Input
+                            placeholder="First Value"
+                            v-model="question.possibleValues[0]"
+                          />
+                          <Input
+                            placeholder="Second Value"
+                            v-model="question.possibleValues[1]"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div v-if="question.type === '2'" class="bg-muted/10 p-4 rounded-lg">
+                      <Label>Multiple Choice Options</Label>
+                      <TagsInput
+                        v-model="question.possibleValues"
+                        class="mt-2"
+                      >
                         <TagsInputItem v-for="item in question.possibleValues" :key="item" :value="item">
                           <TagsInputItemText />
-                          <TagsInputItemDelete />
+                          <TagsInputItemDelete class="hover:text-destructive" />
                         </TagsInputItem>
-
-                        <TagsInputInput placeholder="Values..." />
+                        <TagsInputInput placeholder="Add option..." />
                       </TagsInput>
                     </div>
                   </div>
-                </fieldset>
+                </div>
               </div>
-              <div class="gap-3 flex flex-row-reverse">
-                <Button @click="resetForm" variant="outline" type="button">Reset</Button>
-                <Button type="submit">Submit</Button>
+
+              <div class="flex gap-3 justify-end border-t pt-6">
+                <Button
+                  @click="resetForm"
+                  variant="outline"
+                  type="button"
+                  class="border-destructive/20 text-destructive hover:bg-destructive/5 hover:border-destructive/30"
+                >
+                  Reset Form
+                </Button>
+                <Button type="submit" class="gap-2">
+                  <RocketIcon class="h-4 w-4" />
+                  Publish Questionnaire
+                </Button>
               </div>
-            </fieldset>
+            </div>
           </form>
+        </div>
         </CardContent>
+
       </Card>
-
-
-
-    </AuthenticatedLayout>
+  </AuthenticatedLayout>
 </template>
